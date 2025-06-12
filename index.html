@@ -3,375 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Beauty Standards Photo Booth - Gallery</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .header {
-            text-align: center;
-            color: white;
-            margin-bottom: 40px;
-        }
-
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .header p {
-            font-size: 1.2em;
-            opacity: 0.9;
-        }
-
-        .stats {
-            background: rgba(255,255,255,0.1);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 30px;
-            text-align: center;
-            color: white;
-            backdrop-filter: blur(10px);
-        }
-
-        .refresh-btn {
-            background: #4CAF50;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 16px;
-            margin: 10px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-
-        .refresh-btn:hover {
-            background: #45a049;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-        }
-
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
-        }
-
-        .photo-card {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            overflow: hidden;
-            transition: all 0.3s ease;
-            opacity: 0;
-            animation: fadeIn 0.5s ease forwards;
-        }
-
-        .photo-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .photo-card img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .photo-info {
-            padding: 20px;
-        }
-
-        .photo-info h3 {
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 1.1em;
-        }
-
-        .photo-info p {
-            color: #666;
-            font-size: 0.9em;
-            margin-bottom: 15px;
-        }
-
-        .download-btn {
-            background: #2196F3;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            width: 100%;
-        }
-
-        .download-btn:hover {
-            background: #1976D2;
-        }
-
-        .loading {
-            text-align: center;
-            color: white;
-            font-size: 1.2em;
-            margin: 50px 0;
-        }
-
-        .no-photos {
-            text-align: center;
-            color: white;
-            background: rgba(255,255,255,0.1);
-            padding: 40px;
-            border-radius: 15px;
-            margin: 50px 0;
-        }
-
-        .spinner {
-            border: 4px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            border-top: 4px solid white;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2em;
-            }
-            
-            .gallery {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            
-            .container {
-                padding: 10px;
-            }
-        }
-    </style>
+    <title>✨ Beauty Standards Experience Gallery</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <div class="header">
+        <header>
             <h1>✨ Beauty Standards Experience</h1>
             <p>Your moments of connection and truth</p>
-        </div>
-
-        <div class="stats">
-            <h3 id="photoCount">Loading photos...</h3>
-            <button class="refresh-btn" onclick="loadPhotos()">🔄 Refresh Gallery</button>
-            <button class="refresh-btn" onclick="toggleAutoRefresh()">⏱️ Auto-refresh: <span id="autoStatus">ON</span></button>
-        </div>
-
-        <div id="gallery" class="gallery">
-            <div class="loading">
-                <div class="spinner"></div>
-                <p>Loading your beautiful moments...</p>
+        </header>
+        
+        <div class="controls">
+            <button id="refresh-btn" onclick="loadPhotos()">🔄 Refresh Gallery</button>
+            <div class="auto-refresh">
+                <label>
+                    ⏱️ Auto-refresh: 
+                    <input type="checkbox" id="auto-refresh" checked> 
+                    <span id="refresh-status">ON</span>
+                </label>
             </div>
         </div>
+        
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>Loading your beautiful moments...</p>
+        </div>
+        
+        <div id="error" class="error" style="display: none;">
+            <p>❌ Unable to load photos right now. Please try refreshing.</p>
+        </div>
+        
+        <div id="gallery" class="gallery">
+            <!-- Photos will be loaded here -->
+        </div>
+        
+        <div id="no-photos" class="no-photos" style="display: none;">
+            <p>📷 No photos yet! Take some photos with the photobooth to see them here.</p>
+        </div>
     </div>
-
-    <script>
-        // Configuration - UPDATE THESE VALUES
-        const CONFIG = {
-            // This will store photo URLs as they're uploaded
-            // In a real system, you'd connect this to a database or API
-            photoStorage: [], // We'll simulate this for now
-            
-            // Auto-refresh settings
-            autoRefreshInterval: 10000, // 10 seconds
-            autoRefresh: true
-        };
-
-        let autoRefreshTimer = null;
-        let photoCount = 0;
-
-        // Simulated photo data for demo purposes
-        // In real implementation, this would come from your photo booth uploads
-        const demoPhotos = [
-            {
-                url: "https://via.placeholder.com/400x600/4CAF50/white?text=Photo+1",
-                compliment: "You have such a beautiful smile and you always make everyone feel so welcome.",
-                timestamp: new Date(Date.now() - 1800000).toLocaleString(),
-                id: "demo1"
-            },
-            {
-                url: "https://via.placeholder.com/400x600/2196F3/white?text=Photo+2", 
-                compliment: "I really admire your sense of humor and how you make others feel comfortable.",
-                timestamp: new Date(Date.now() - 900000).toLocaleString(),
-                id: "demo2"
-            },
-            {
-                url: "https://via.placeholder.com/400x600/FF9800/white?text=Photo+3",
-                compliment: "You have this amazing ability to listen and make people feel heard.",
-                timestamp: new Date().toLocaleString(),
-                id: "demo3"
-            }
-        ];
-
-        function loadPhotos() {
-            console.log('Loading photos...');
-            
-            // In a real system, you would:
-            // 1. Fetch photos from your server/database
-            // 2. Or check a specific ImgBB album
-            // 3. Or read from a JSON file that gets updated by the photo booth
-            
-            // For demo, we'll use placeholder images
-            displayPhotos(demoPhotos);
-        }
-
-        function displayPhotos(photos) {
-            const gallery = document.getElementById('gallery');
-            const photoCountEl = document.getElementById('photoCount');
-            
-            if (photos.length === 0) {
-                gallery.innerHTML = `
-                    <div class="no-photos">
-                        <h3>📸 No photos yet!</h3>
-                        <p>Photos will appear here as people use the photo booth.</p>
-                        <p>Check back in a few minutes or refresh the page.</p>
-                    </div>
-                `;
-                photoCountEl.textContent = "No photos yet";
-                return;
-            }
-
-            // Update photo count
-            photoCountEl.textContent = `${photos.length} beautiful moment${photos.length !== 1 ? 's' : ''} captured`;
-
-            // Sort photos by timestamp (newest first)
-            photos.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-
-            // Generate gallery HTML
-            gallery.innerHTML = photos.map((photo, index) => `
-                <div class="photo-card" style="animation-delay: ${index * 0.1}s">
-                    <img src="${photo.url}" alt="Photo booth moment" loading="lazy">
-                    <div class="photo-info">
-                        <h3>💝 Shared Compliment</h3>
-                        <p>"${photo.compliment}"</p>
-                        <p style="font-size: 0.8em; color: #999;">📅 ${photo.timestamp}</p>
-                        <button class="download-btn" onclick="downloadPhoto('${photo.url}', '${photo.id}')">
-                            📥 Download Photo
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-
-            console.log(`Displayed ${photos.length} photos`);
-        }
-
-        function downloadPhoto(url, photoId) {
-            // Create a temporary link to download the photo
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `photo-booth-moment-${photoId}.jpg`;
-            link.target = '_blank';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
-        function toggleAutoRefresh() {
-            CONFIG.autoRefresh = !CONFIG.autoRefresh;
-            const statusEl = document.getElementById('autoStatus');
-            
-            if (CONFIG.autoRefresh) {
-                statusEl.textContent = 'ON';
-                startAutoRefresh();
-            } else {
-                statusEl.textContent = 'OFF';
-                stopAutoRefresh();
-            }
-        }
-
-        function startAutoRefresh() {
-            if (autoRefreshTimer) clearInterval(autoRefreshTimer);
-            
-            autoRefreshTimer = setInterval(() => {
-                console.log('Auto-refreshing photos...');
-                loadPhotos();
-            }, CONFIG.autoRefreshInterval);
-        }
-
-        function stopAutoRefresh() {
-            if (autoRefreshTimer) {
-                clearInterval(autoRefreshTimer);
-                autoRefreshTimer = null;
-            }
-        }
-
-        // Real-world integration functions
-        // These would be called by your photo booth system
-
-        function addNewPhoto(photoUrl, compliment) {
-            // This function would be called when a new photo is uploaded
-            const newPhoto = {
-                url: photoUrl,
-                compliment: compliment,
-                timestamp: new Date().toLocaleString(),
-                id: Date.now().toString()
-            };
-            
-            // Add to storage (in real system, this would save to database)
-            CONFIG.photoStorage.push(newPhoto);
-            
-            // Refresh display
-            loadPhotos();
-            
-            console.log('New photo added:', newPhoto);
-        }
-
-        // Initialize the gallery
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('Photo gallery initialized');
-            loadPhotos();
-            
-            // Start auto-refresh if enabled
-            if (CONFIG.autoRefresh) {
-                startAutoRefresh();
-            }
-        });
-
-        // Handle page visibility changes (pause auto-refresh when tab is hidden)
-        document.addEventListener('visibilitychange', function() {
-            if (document.hidden) {
-                stopAutoRefresh();
-            } else if (CONFIG.autoRefresh) {
-                startAutoRefresh();
-            }
-        });
-    </script>
+    
+    <script src="script.js"></script>
 </body>
 </html>
