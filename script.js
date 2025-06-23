@@ -76,11 +76,20 @@ async function loadPhotos() {
                 <div class="photo-info">
                     <p class="compliment">"${escapeHtml(displayCompliment)}"</p>
                     <p class="timestamp">${formattedTime}</p>
-                    <button class="download-btn" onclick="downloadPhoto('${photo.url}', '${filename}', '${escapeHtml(fullCompliment)}')">
+                    <button class="download-btn" data-url="${photo.url}" data-filename="${filename}" data-compliment="${escapeHtml(fullCompliment)}">
                         📥 Download Photo
                     </button>
                 </div>
             `;
+            
+            // Add click event listener to the download button
+            const downloadBtn = photoDiv.querySelector('.download-btn');
+            downloadBtn.addEventListener('click', function() {
+                const url = this.getAttribute('data-url');
+                const filename = this.getAttribute('data-filename');
+                const compliment = this.getAttribute('data-compliment');
+                downloadPhoto(url, filename, compliment);
+            });
             
             gallery.appendChild(photoDiv);
         });
