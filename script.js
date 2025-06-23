@@ -66,13 +66,17 @@ async function loadPhotos() {
             // Extract filename from URL for download
             const filename = `${photo.id || 'photo'}.jpg`;
             
+            // Show only first 3 words for display
+            const fullCompliment = photo.compliment || 'A beautiful moment captured';
+            const displayCompliment = getFirstThreeWords(fullCompliment);
+            
             photoDiv.innerHTML = `
                 <img src="${photo.url}" alt="Photobooth capture" loading="lazy" 
                      onerror="this.parentElement.style.display='none'">
                 <div class="photo-info">
-                    <p class="compliment">"${escapeHtml(photo.compliment || 'A beautiful moment captured')}"</p>
+                    <p class="compliment">"${escapeHtml(displayCompliment)}"</p>
                     <p class="timestamp">${formattedTime}</p>
-                    <button class="download-btn" onclick="downloadPhoto('${photo.url}', '${filename}')">
+                    <button class="download-btn" onclick="downloadPhoto('${photo.url}', '${filename}', '${escapeHtml(fullCompliment)}')">
                         📥 Download Photo
                     </button>
                 </div>
@@ -132,7 +136,17 @@ function stopAutoRefresh() {
     console.log('Auto-refresh disabled');
 }
 
-function downloadPhoto(url, filename) {
+function getFirstThreeWords(text) {
+    if (!text || text.trim() === '') return 'A beautiful moment captured';
+    const words = text.trim().split(/\s+/);
+    if (words.length <= 3) return text;
+    return words.slice(0, 3).join(' ') + '...';
+}
+
+function downloadPhoto(url, filename, fullCompliment) {
+    // For now, we'll just download the original image
+    // In the future, you could modify this to overlay the full text on the image
+    
     // Method 1: Try direct download
     const link = document.createElement('a');
     link.href = url;
@@ -165,6 +179,11 @@ function downloadPhoto(url, filename) {
             // Fallback: open in new tab
             window.open(url, '_blank');
         });
+    
+    // Optional: Show the full compliment in a notification when downloading
+    if (fullCompliment && fullCompliment !== 'A beautiful moment captured') {
+        showNotification(`Full message: "${fullCompliment}"`);
+    }
 }
 
 function escapeHtml(text) {
