@@ -66,9 +66,9 @@ async function loadPhotos() {
             // Extract filename from URL for download
             const filename = `${photo.id || 'photo'}.jpg`;
             
-            // Show only first 3 words for display
+            // Show only first 5 words for display
             const fullCompliment = photo.compliment || 'A beautiful moment captured';
-            const displayCompliment = getFirstThreeWords(fullCompliment);
+            const displayCompliment = getFirstFiveWords(fullCompliment);
             
             photoDiv.innerHTML = `
                 <img src="${photo.url}" alt="Photobooth capture" loading="lazy" 
@@ -145,11 +145,11 @@ function stopAutoRefresh() {
     console.log('Auto-refresh disabled');
 }
 
-function getFirstThreeWords(text) {
+function getFirstFiveWords(text) {
     if (!text || text.trim() === '') return 'A beautiful moment captured';
     const words = text.trim().split(/\s+/);
-    if (words.length <= 3) return text;
-    return words.slice(0, 3).join(' ') + '...';
+    if (words.length <= 5) return text;
+    return words.slice(0, 5).join(' ') + '...';
 }
 
 function downloadPhoto(url, filename, fullCompliment) {
