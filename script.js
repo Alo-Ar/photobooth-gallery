@@ -74,7 +74,7 @@ async function loadPhotos() {
                 <img src="${photo.url}" alt="Photobooth capture" loading="lazy" 
                      onerror="this.parentElement.style.display='none'">
                 <div class="photo-info">
-                    <p class="compliment">"${escapeHtml(displayCompliment)}"</p>
+                    <p class="compliment">"${escapeHtml(fullCompliment)}"</p>
                     <p class="timestamp">${formattedTime}</p>
                     <button class="download-btn" data-url="${photo.url}" data-filename="${filename}" data-compliment="${escapeHtml(fullCompliment)}">
                         📥 Download Photo
